@@ -10,8 +10,20 @@ public class Main {
 
     private static int N, M,K,  result = Integer.MAX_VALUE;
 
-    private static boolean[] checkArr;
-    private static int[] words;
+    private static int[][] space;
+
+    static class Bead{
+        int x;
+        int y;
+        public Bead(){};
+        public Bead(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    private static int[] dx = new int[]{0, 0, -1, 1};
+    private static int[] dy = new int[]{-1, 1, 0, 0};
 
     public static void main(String[] args) throws IOException {
 
@@ -20,48 +32,73 @@ public class Main {
 
         st = new StringTokenizer(br.readLine());
         N = Integer.valueOf(st.nextToken());
-        K = Integer.valueOf(st.nextToken());
+        M = Integer.valueOf(st.nextToken());
 
-        checkArr = new boolean[26];
-        words = new int[N];
+        space = new int[N][M];
 
-        for(int i=0;i<N;i++) {
-            String s = br.readLine();
-            for(char c: s.toCharArray())
-                words[i] |= (1 << c - 'a');
+        Bead red = new Bead();
+        Bead blue = new Bead();
+
+        for(int i=0;i<N;i++){
+            char[] input = br.readLine().toCharArray();
+            for(int j=0;j<input.length;j++){
+                switch (input[j]){
+                    case '#':
+                        space[i][j] = -1;
+                        break;
+                    case '.':
+                        space[i][j] = 0;
+                        break;
+                    case 'O':
+                        space[i][j] = 1;
+                        break;
+                    case 'B':
+                        blue = new Bead(j, i);
+                        break;
+                    case 'R':
+                        red = new Bead(j, i);
+                        break;
+                }
+            }
         }
 
-        System.out.print(go(0, K, 0));
+        System.out.print(go(red, blue, -1, 0));
 
         bw.flush();
         bw.close();
     }
 
-    static int count(int mask, int[] words) {
-        int cnt = 0;
-        for (int word : words) {
-            if ((word & ((1<<26)-1-mask)) == 0) {
-                cnt += 1;
+    static int go(Bead r, Bead b, int prev_r, int cnt){
+
+        int ans = -1;
+        if(cnt == 11) return -1;
+
+        for(int i=0;i<4;i++){
+            int r_nx = r.x, r_ny = r.y, r_bx = b.x, r_by = b.y;
+            int c = 0;
+            int count = 0;
+            if(prev_r != i) {
+                if(space[r_ny + dy[i]][r_nx + dx[i]] == -1 && space[r_by + dy[i]][r_bx + dx[i]] == -1) continue;
+                while (c < 2) {
+                    if(space[r_ny][r_nx] == -1) c++;
+                    else{
+                        r_nx += dx[i];
+                        r_ny += dy[i];
+                    }
+                    if(space[r_by][r_bx] == -1) c++;
+                    else{
+                        r_bx += dx[i];
+                        r_by += dy[i];
+                    }
+
+                    if(space[r_by][r_bx] == 1) break;
+                    if(space[r_ny][r_nx] == 1) return cnt + 1;
+                }
+                if(space[r_by][r_bx] == 1) continue;
+                ans = go(new Bead(r_nx, r_ny), new Bead(r_bx, r_by), i, cnt + 1);
             }
-        }
-        return cnt;
-    }
-    static int go(int index, int k, int mask) {
-        if (k < 0) return 0;
-        if (index == 26) {
-            return count(mask, words);
-        }
-        int ans = 0;
-
-        // 무조건 배움
-        int t1 = go(index+1, k-1, mask | (1 << index));
-        if (ans < t1) ans = t1;
-
-        // 'a', 'n', 't', 'i', 'c' 를 안배우는 경우는 없다는 뜻, -> 다른 알파벳일 경우는 안배움.
-        if (index != 'a'-'a' && index != 'n'-'a' && index != 't'-'a' && index != 'i'-'a' && index != 'c'-'a') {
-            t1 = go(index+1, k, mask);
-            if (ans < t1) ans = t1;
         }
         return ans;
     }
+
 }
