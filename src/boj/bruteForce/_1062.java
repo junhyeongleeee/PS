@@ -1,7 +1,15 @@
-import java.io.*;
-import java.util.*;
+package boj.bruteForce;
 
-public class Main {
+import java.io.*;
+import java.util.StringTokenizer;
+
+
+/**
+ * 문제 : 가르침
+ * 해설 : 비트 마스크 활용
+ */
+
+public class _1062 {
 
     private static BufferedWriter bw;
     private static BufferedReader br;
