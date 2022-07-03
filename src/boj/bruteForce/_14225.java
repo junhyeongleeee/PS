@@ -17,6 +17,8 @@ import java.util.StringTokenizer;
  * - 문제에서 주어진 자연수 범위 만큼의 boolean 배열을 정의.
  * - combination 을 사용하여 조합의 합들을 boolean 배열의 index 로 하여 true 값을 넣음.
  * - boolean 배열 처음부터 확인.
+ * - solution 3 :
+ * - 비트마스크를 이용한 브루트 포스
  */
 
 public class _14225 {
@@ -33,6 +35,8 @@ public class _14225 {
 
     private static boolean[] checkArr;
 
+    private static final int SIZE = 20*100000 + 1;
+
     public static void main(String[] args) throws IOException {
 
         bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -43,18 +47,41 @@ public class _14225 {
         N = Integer.valueOf(st.nextToken());
         num = new int[N];
         arr = new ArrayList<>();
-        checkArr = new boolean[20 * 100000 + 1];
+        checkArr = new boolean[SIZE];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
             num[i] = Integer.valueOf(st.nextToken());
         }
 
-        int result = solution2();
+        int result = solution3();
 
         bw.write(result + "");
         bw.flush();
         bw.close();
+    }
+
+    private static int solution3(){
+        int result = 0;
+
+        for(int i=0;i<(1<<N);i++){
+            int sum = 0;
+            for(int j=0;j<N;j++){
+                if((i&(1<<j)) != 0){
+                    sum += num[j];
+                }
+            }
+            checkArr[sum] = true;
+        }
+
+        for(int i=1;i<SIZE;i++){
+            if(!checkArr[i]) {
+                result = i;
+                break;
+            }
+        }
+
+        return result;
     }
 
     private static int solution2() {
