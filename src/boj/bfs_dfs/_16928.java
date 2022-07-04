@@ -1,7 +1,14 @@
-import java.io.*;
-import java.util.*;
+package boj.bfs_dfs;
 
-public class Main {
+import java.io.*;
+import java.util.StringTokenizer;
+
+/**
+ * 문제 : 뱀과 사다리 게임
+ * 해설 : DFS, 방문 배열을 boolean 대신 counting 개수로 만들어 해결
+ */
+
+public class _16928 {
 
     private static BufferedWriter bw;
     private static BufferedReader br;
@@ -74,5 +81,4 @@ public class Main {
             }
         }
     }
-
 }
