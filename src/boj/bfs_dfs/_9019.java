@@ -11,7 +11,7 @@ public class _9019 {
         while (t-- > 0) {
             int n = sc.nextInt();
             int m = sc.nextInt();
-            boolean[] check = new boolean[100010];
+            boolean[] check = new boolean[10000];
             char[] how = new char[10000];
             int[] from = new int[10000];
             check[n] = true;
