@@ -1,61 +1,96 @@
 package boj.bfs_dfs;
 
+import java.io.*;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class _9019 {
-    public static void main(String args[]) {
-        Scanner sc = new Scanner(System.in);
-        int t = sc.nextInt();
-        while (t-- > 0) {
-            int n = sc.nextInt();
-            int m = sc.nextInt();
-            boolean[] check = new boolean[10000];
-            char[] how = new char[10000];
-            int[] from = new int[10000];
-            check[n] = true;
-            from[n] = -1;
-            Queue<Integer> q = new LinkedList<Integer>();
-            q.add(n);
-            while (!q.isEmpty()) {
-                int now = q.remove();
-                int next = (now*2) % 10000;
-                if (check[next] == false) {
-                    q.add(next);
-                    check[next] = true;
-                    from[next] = now;
-                    how[next] = 'D';
-                }
-                next = now-1;
-                if (next == -1) next = 9999;
-                if (check[next] == false) {
-                    q.add(next);
-                    check[next] = true;
-                    from[next] = now;
-                    how[next] = 'S';
-                }
-                next = (now%1000)*10 + now/1000;
-                if (check[next] == false) {
-                    q.add(next);
-                    check[next] = true;
-                    from[next] = now;
-                    how[next] = 'L';
-                }
-                next = (now/10) + (now%10)*1000;
-                if (check[next] == false) {
-                    q.add(next);
-                    check[next] = true;
-                    from[next] = now;
-                    how[next] = 'R';
-                }
-            }
-            StringBuilder ans = new StringBuilder();
-            while (m != n) {
-                ans.append(how[m]);
-                m = from[m];
-            }
-            System.out.println(ans.reverse());
+
+    private static BufferedWriter bw;
+    private static BufferedReader br;
+
+    private static StringTokenizer st;
+
+    private static int T;
+    private static char[] how;
+    private static boolean[] visited;
+    private static int[] from;
+    private static Queue<Integer> queue;
+
+    public static void main(String[] args) throws IOException {
+
+        bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        br = new BufferedReader(new InputStreamReader(System.in));
+
+        st = new StringTokenizer(br.readLine());
+        T = Integer.valueOf(st.nextToken());
+
+        if(T == 0) return;
+
+        for(int i=0;i<T;i++){
+            st = new StringTokenizer(br.readLine());
+            int s = Integer.valueOf(st.nextToken());
+            int b = Integer.valueOf(st.nextToken());
+
+            bw.write(bfs(s, b) + "\n");
         }
+
+        bw.flush();
+        bw.close();
+    }
+
+    static String bfs(int s, int b){
+        queue = new LinkedList<>();
+        how = new char[10000];
+        from = new int[10000];
+        visited = new boolean[10000];
+        queue.add(s);
+        visited[s] = true;
+
+        while(!queue.isEmpty()){
+            int num = queue.remove();
+
+            if(num == b){
+                StringBuilder sb = new StringBuilder();
+                while( s != b){
+                    sb.append(how[b]);
+                    b = from[b];
+                }
+                return sb.reverse().toString();
+            }
+
+            int n_num = num*2 % 10000;
+
+            if(!visited[n_num]){
+                visited[n_num] = true;
+                how[n_num] = 'D';
+                from[n_num] = num;
+                queue.add(n_num);
+            }
+            n_num = num == 0 ? 9999 : num - 1;
+            if(!visited[n_num]){
+                visited[n_num] = true;
+                how[n_num] = 'S';
+                from[n_num] = num;
+                queue.add(n_num);
+            }
+            n_num = num % 1000 * 10 + num / 1000;
+            if(!visited[n_num]){
+                visited[n_num] = true;
+                how[n_num] = 'L';
+                from[n_num] = num;
+                queue.add(n_num);
+            }
+            n_num = num%10 * 1000 + num/10;
+            if(!visited[n_num]){
+                visited[n_num] = true;
+                how[n_num] = 'R';
+                from[n_num] = num;
+                queue.add(n_num);
+            }
+        }
+
+        return "";
     }
 }

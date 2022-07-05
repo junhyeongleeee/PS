@@ -8,12 +8,10 @@ public class Main {
 
     private static StringTokenizer st;
 
-    private static int T, N, M, K, result = Integer.MAX_VALUE;
+    private static int T;
     private static char[] how;
     private static boolean[] visited;
     private static int[] from;
-
-    private static char[] dslr = new char[]{'D', 'S', 'L', 'R'};
     private static Queue<Integer> queue;
 
     public static void main(String[] args) throws IOException {
@@ -48,7 +46,18 @@ public class Main {
 
         while(!queue.isEmpty()){
             int num = queue.remove();
+
+            if(num == b){
+                StringBuilder sb = new StringBuilder();
+                while( s != b){
+                    sb.append(how[b]);
+                    b = from[b];
+                }
+                return sb.reverse().toString();
+            }
+
             int n_num = num*2 % 10000;
+
             if(!visited[n_num]){
                 visited[n_num] = true;
                 how[n_num] = 'D';
@@ -78,11 +87,6 @@ public class Main {
             }
         }
 
-        StringBuilder sb = new StringBuilder();
-        while( s != b){
-            sb.append(how[b]);
-            b = from[b];
-        }
-        return sb.toString();
+        return "";
     }
 }
