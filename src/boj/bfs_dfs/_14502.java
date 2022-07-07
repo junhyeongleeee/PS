@@ -1,19 +1,18 @@
-import java.io.*;
-import java.util.*;
+package boj.bfs_dfs;
 
+import java.io.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 /**
- *  1초 일 때 입력의 최대 크기
- *
- *  O(N) : 약 1억
- *  O(N^2) : 약 1만
- *  O(N^3) : 약 500
- *  O(2^N) : 약 20
- *  O(N!) : 약 10
+ * 문제 : 연구소
+ * 해설 : DFS , BFS 동시에 사용.
  */
 
 
-public class Main {
+public class _14502 {
+
 
     private static BufferedWriter bw;
     private static BufferedReader br;
@@ -119,5 +118,4 @@ public class Main {
 
         answer = Math.max(answer, count);
     }
-
 }
