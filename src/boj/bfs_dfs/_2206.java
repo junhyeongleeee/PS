@@ -69,4 +69,39 @@ public class _2206 {
             System.out.println(-1);
         }
     }
+
+    /*static int bfs() {
+        q = new LinkedList<>();
+        q.add(new Main.Point(0, 0, 0));
+        dist[0][0][0] = 1;
+
+        while (!q.isEmpty()) {
+            Main.Point p = q.remove();
+
+            int crash = p.crash;
+
+            for (int i = 0; i < 4; i++) {
+                int nx = p.x + dx[i];
+                int ny = p.y + dy[i];
+
+                if (nx >= 0 && ny >= 0 && nx < M && ny < N) {
+                    if (area[ny][nx] == 0 && dist[ny][nx][crash] == 0) {
+                        dist[ny][nx][crash] = dist[p.y][p.x][crash] + 1;
+                        q.add(new Main.Point(nx, ny, crash));
+                    }
+                    if (crash == 0 && area[ny][nx] == 1 && dist[ny][nx][1] == 0) {
+                        dist[ny][nx][1] = dist[p.y][p.x][0] + 1;
+                        q.add(new Main.Point(nx, ny, 1));
+                    }
+                }
+            }
+        }
+        if (dist[N - 1][M - 1][0] != 0 && dist[N-1][M - 1][1] != 0)
+            return Math.min(dist[N - 1][M - 1][0], dist[N - 1][M - 1][1]);
+        else if(dist[N - 1][M - 1][0] != 0)
+            return dist[N - 1][M - 1][0];
+        else if(dist[N - 1][M - 1][1] != 1)
+            return dist[N - 1][M - 1][1];
+        else return -1;
+    }*/
 }

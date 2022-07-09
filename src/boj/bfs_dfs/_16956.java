@@ -1,43 +1,23 @@
-import java.io.*;
-import java.util.*;
+package boj.bfs_dfs;
 
+import java.io.*;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 /**
- * 1초 일 때 입력의 최대 크기
- * <p>
- * O(N) : 약 1억
- * O(N^2) : 약 1만
- * O(N^3) : 약 500
- * O(2^N) : 약 20
- * O(N!) : 약 10
+ * 문제 : 늑대와 양
+ * 해설 : 백준 강의에서 BFS 에 있었으나 , 구현문제였음.
  */
 
-
-public class Main {
+public class _16956 {
 
     private static BufferedWriter bw;
     private static BufferedReader br;
     private static StringTokenizer st;
     private static int N, M, A, B, C,R,  sum, answer = Integer.MIN_VALUE;
     private static char[][] area;
-    private static int[][][] dist;
-    private static Queue<Point> q;
     private static int[] dx = new int[]{0, 0, -1, 1};
     private static int[] dy = new int[]{-1, 1, 0, 0};
-
-    private static boolean[][] visited;
-
-    private static class Point {
-        int x;
-        int y;
-        int crash;
-
-        public Point(int x, int y, int crash) {
-            this.x = x;
-            this.y = y;
-            this.crash = crash;
-        }
-    }
 
     public static void main(String[] args) throws IOException {
 
