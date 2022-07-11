@@ -1,20 +1,11 @@
+package boj.bfs_dfs;
+
 import java.io.*;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
-
-/**
- * 1초 일 때 입력의 최대 크기
- * <p>
- * O(N) : 약 1억
- * O(N^2) : 약 1만
- * O(N^3) : 약 500
- * O(2^N) : 약 20
- * O(N!) : 약 10
- */
-
-
-public class Main {
-
+public class _5014 {
     private static BufferedWriter bw;
     private static BufferedReader br;
     private static StringTokenizer st;
