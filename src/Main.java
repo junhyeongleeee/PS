@@ -12,32 +12,36 @@ import java.util.*;
  * O(N!) : 약 10
  */
 
-
 public class Main {
 
     private static BufferedWriter bw;
     private static BufferedReader br;
     private static StringTokenizer st;
-    private static int N, M, A, B, C, R, F, S, G, U, D, sum, answer = Integer.MIN_VALUE;
+    private static int N, M, A, B, C, R, F, S, G, U, D, T, H, W, sum, answer = 0;
     private static char[][] area;
-    private static int[][][] dist;
-    private static Queue<Integer> q;
+    private static int[][] dist;
+    private static Queue<Point> q;
     private static int[] dx = new int[]{0, 0, -1, 1};
     private static int[] dy = new int[]{-1, 1, 0, 0};
 
-    private static int[] visited;
+    private static boolean[][] visited;
+    private static boolean[][] check;
+
 
     private static class Point {
         int x;
         int y;
-        int crash;
+        
+        int w;
 
-        public Point(int x, int y, int crash) {
+        public Point(int x, int y, int w) {
             this.x = x;
             this.y = y;
-            this.crash = crash;
+            this.w = w;
         }
     }
+    
+    static ArrayList<Point> arr;
 
     public static void main(String[] args) throws IOException {
 
@@ -45,51 +49,77 @@ public class Main {
         br = new BufferedReader(new InputStreamReader(System.in));
 
         st = new StringTokenizer(br.readLine());
-        F = Integer.valueOf(st.nextToken());
-        S = Integer.valueOf(st.nextToken());
-        G = Integer.valueOf(st.nextToken());
-        U = Integer.valueOf(st.nextToken());
-        D = Integer.valueOf(st.nextToken());
+        T = Integer.valueOf(st.nextToken());
 
-        visited = new int[F + 1];
+        for (int i = 0; i < T; i++) {
+            st = new StringTokenizer(br.readLine());
+            H = Integer.valueOf(st.nextToken());
+            W = Integer.valueOf(st.nextToken());
 
-        bfs();
+            area = new char[H + 2][W + 2];
+            dist = new int[H + 2][W + 2];
+            arr = new ArrayList<>();
 
+            int result = Integer.MAX_VALUE;
+
+            arr.add(new Point(0, 0, 0));
+
+            for (int j = 1; j <= H; j++) {
+                char[] chars = br.readLine().toCharArray();
+                for (int k = 1; k <= W; k++) {
+                    area[j][k] = chars[k - 1];
+                    if (area[j][k] == '$') {
+                        arr.add(new Point(k, j, 0));
+                    }
+                }
+            }
+
+            bfs(0);
+            bfs(1);
+            bfs(2);
+
+            for(int j=0;j<H + 2;j++){
+                for(int k=0;k<W + 2;k++){
+                    int d = dist[j][k];
+                    if(area[j][k] == '*') continue;
+                    if(area[j][k] == '#') d -= 2;
+                    result = Math.min(result, d);
+                }
+            }
+
+            bw.write(result + "\n");
+        }
         bw.flush();
         bw.close();
     }
-
-    static void bfs() {
+    static void bfs(int idx) {
         q = new LinkedList<>();
-        q.add(S);
-        visited[S] = 1;
+        Point s_p = arr.get(idx);
+        q.add(s_p);
+        visited = new boolean[H + 2][W + 2];
+        visited[s_p.y][s_p.x] = true;
 
-        if(S == G) {
-            System.out.print(0);
-            return;
+        while(!q.isEmpty()){
+            Point p = q.remove();
+            
+            int w = p.w;
+
+            for(int i=0;i<4;i++){
+                int nx = p.x + dx[i];
+                int ny = p.y + dy[i];
+
+                if(ny >=0 && nx >= 0 && ny < H + 2 && nx < W + 2){
+                    if(area[ny][nx] == '*') continue;
+
+                    if(!visited[ny][nx]){
+                        int nw = w;
+                        if(area[ny][nx] == '#') nw++;
+                        dist[ny][nx] += nw;
+                        q.add(new Point(nx, ny, nw));
+                        visited[ny][nx] = true;
+                    }
+                }
+            }
         }
-
-        while (!q.isEmpty()) {
-            int s = q.remove();
-            int u_s = s + U;
-            int d_s = s - D;
-
-            if(u_s == G || d_s == G){
-                System.out.print(visited[s]);
-                return;
-            }
-
-            if (u_s <= F && visited[u_s] == 0) {
-                q.add(u_s);
-                visited[u_s] = visited[s] + 1;
-            }
-
-            if (d_s > 0 && visited[d_s] == 0) {
-                q.add(d_s);
-                visited[d_s] = visited[s] + 1;
-            }
-        }
-
-        System.out.print("use the stairs");
     }
 }
