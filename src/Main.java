@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.io.*;
 import java.util.*;
 
@@ -17,21 +19,19 @@ public class Main {
     private static BufferedWriter bw;
     private static BufferedReader br;
     private static StringTokenizer st;
-    private static int N, M, A, B, C, R, F, S, G, U, D, T, H, W, sum, answer = 0;
-    private static char[][] area;
-    private static int[][] dist;
-    private static Queue<Point> q;
+    private static int N, M, A, B, C, R, F, S, G, U, D, T, H, W, k, Q, sum, answer = 0;
+
     private static int[] dx = new int[]{0, 0, -1, 1};
     private static int[] dy = new int[]{-1, 1, 0, 0};
 
-    private static boolean[][] visited;
-    private static boolean[][] check;
-
+    static List<Integer> numbers;
+    static List<String> sentences;
+    static List<String> queries;
 
     private static class Point {
         int x;
         int y;
-        
+
         int w;
 
         public Point(int x, int y, int w) {
@@ -40,7 +40,7 @@ public class Main {
             this.w = w;
         }
     }
-    
+
     static ArrayList<Point> arr;
 
     public static void main(String[] args) throws IOException {
@@ -48,78 +48,73 @@ public class Main {
         bw = new BufferedWriter(new OutputStreamWriter(System.out));
         br = new BufferedReader(new InputStreamReader(System.in));
 
-        st = new StringTokenizer(br.readLine());
-        T = Integer.valueOf(st.nextToken());
+        N = Integer.valueOf(br.readLine());
 
-        for (int i = 0; i < T; i++) {
-            st = new StringTokenizer(br.readLine());
-            H = Integer.valueOf(st.nextToken());
-            W = Integer.valueOf(st.nextToken());
+        sentences = new ArrayList<>();
 
-            area = new char[H + 2][W + 2];
-            dist = new int[H + 2][W + 2];
-            arr = new ArrayList<>();
+        for (int i = 0; i < N; i++)
+            sentences.add(br.readLine());
 
-            int result = Integer.MAX_VALUE;
+        Q = Integer.valueOf(br.readLine());
+        queries = new ArrayList<>();
 
-            arr.add(new Point(0, 0, 0));
+        for (int i = 0; i < Q; i++)
+            queries.add(br.readLine());
 
-            for (int j = 1; j <= H; j++) {
-                char[] chars = br.readLine().toCharArray();
-                for (int k = 1; k <= W; k++) {
-                    area[j][k] = chars[k - 1];
-                    if (area[j][k] == '$') {
-                        arr.add(new Point(k, j, 0));
-                    }
-                }
-            }
-
-            bfs(0);
-            bfs(1);
-            bfs(2);
-
-            for(int j=0;j<H + 2;j++){
-                for(int k=0;k<W + 2;k++){
-                    int d = dist[j][k];
-                    if(area[j][k] == '*') continue;
-                    if(area[j][k] == '#') d -= 2;
-                    result = Math.min(result, d);
-                }
-            }
-
-            bw.write(result + "\n");
+        for (int i = 0; i < textQueries(sentences, queries).size(); i++) {
+            List<Integer> result = textQueries(sentences, queries).get(i);
+            for (int j = 0; j < result.size(); j++)
+                System.out.print(result.get(j) + " ");
+            System.out.println();
         }
+
         bw.flush();
         bw.close();
     }
-    static void bfs(int idx) {
-        q = new LinkedList<>();
-        Point s_p = arr.get(idx);
-        q.add(s_p);
-        visited = new boolean[H + 2][W + 2];
-        visited[s_p.y][s_p.x] = true;
 
-        while(!q.isEmpty()){
-            Point p = q.remove();
-            
-            int w = p.w;
+    public static List<List<Integer>> textQueries(List<String> sentences, List<String> queries) {
+        // Write your code here
 
-            for(int i=0;i<4;i++){
-                int nx = p.x + dx[i];
-                int ny = p.y + dy[i];
+        List<List<Integer>> list = new ArrayList<>();
 
-                if(ny >=0 && nx >= 0 && ny < H + 2 && nx < W + 2){
-                    if(area[ny][nx] == '*') continue;
+        for (int i = 0; i < queries.size(); i++)
+            list.add(new ArrayList<>());
 
-                    if(!visited[ny][nx]){
-                        int nw = w;
-                        if(area[ny][nx] == '#') nw++;
-                        dist[ny][nx] += nw;
-                        q.add(new Point(nx, ny, nw));
-                        visited[ny][nx] = true;
-                    }
-                }
+        List<List<String>> list_query = new ArrayList<>();
+
+        for (int i = 0; i < queries.size(); i++) {
+            list_query.add(new ArrayList<>());
+            String[] arr = queries.get(i).split(" ");
+            for (int j = 0; j < arr.length; j++) {
+                list_query.get(i).add(arr[j]);
             }
         }
+
+        for (int i = 0; i < sentences.size(); i++) {
+            String[] arr = sentences.get(i).split(" ");
+            Map<String, Boolean> map = new HashMap<>();
+
+            for (int j = 0; j < arr.length; j++)
+                map.put(arr[j], true);
+
+            for (int j = 0; j < list_query.size(); j++) {
+                List<String> query = list_query.get(j);
+                boolean check = true;
+                for (int k = 0; k < query.size(); k++)
+                    if (map.get(query.get(k)) == null) {
+                        check = false;
+                        break;
+                    }
+
+                if (check) list.get(j).add(i);
+            }
+        }
+
+        for (int i = 0; i < list.size(); i++)
+            if (list.get(i).size() == 0)
+                list.get(i).add(-1);
+
+        return list;
     }
+
 }
