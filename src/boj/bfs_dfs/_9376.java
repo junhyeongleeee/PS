@@ -1,6 +1,7 @@
 package boj.bfs_dfs;
 
 import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class _9376 {
@@ -100,4 +101,35 @@ public class _9376 {
             System.out.println(ans);
         }
     }
+
+    /*static void bfs(int idx) {
+        q = new LinkedList<>();
+        Main.Point s_p = arr.get(idx);
+        q.add(s_p);
+        visited = new boolean[H + 2][W + 2];
+        visited[s_p.y][s_p.x] = true;
+
+        while(!q.isEmpty()){
+            Main.Point p = q.remove();
+
+            int w = p.w;
+
+            for(int i=0;i<4;i++){
+                int nx = p.x + dx[i];
+                int ny = p.y + dy[i];
+
+                if(ny >=0 && nx >= 0 && ny < H + 2 && nx < W + 2){
+                    if(area[ny][nx] == '*') continue;
+
+                    if(!visited[ny][nx]){
+                        int nw = w;
+                        if(area[ny][nx] == '#') nw++;
+                        dist[ny][nx] += nw;
+                        q.add(new Main.Point(nx, ny, nw));
+                        visited[ny][nx] = true;
+                    }
+                }
+            }
+        }
+    }*/
 }
