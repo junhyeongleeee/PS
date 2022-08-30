@@ -5,63 +5,24 @@ import java.util.LinkedList
 
 val orders = arrayOf("ABCDE", "AB", "CD", "ADE", "XYZ", "XYZ", "ACD")
 val course = arrayOf(2, 3, 4)
-val answer = mutableListOf<String>()
 
 fun main() {
 
     val comb = mutableListOf<String>()
-    val map = mutableMapOf<String, Int>()
+    for (o in orders)
+        for (c in course)
+            combination(comb, o.toList().sorted(), "", 0, c)
 
-    for (order in orders) {
-        var sortedOrder =
-            order.toCharArray()
-                .sorted()
-                .joinToString("")
-
-        for (i in course)
-            combination(comb, sortedOrder, "", 0, i)
+    val answer = mutableListOf<String>()
+    comb.groupingBy { it }.eachCount().toList().groupBy { it.first.length }.forEach { (_, pair) ->
+        val maxCount = pair.maxByOrNull { it.second }?.second
+        answer.addAll(pair.filter { it.second >= 2 && it.second == maxCount }.map { it.first })
     }
-
-    for (element in comb) {
-        if (map[element] == null)
-            map[element] = 1
-        else
-            map[element] = map.getValue(element) + 1
-    }
-
-    var mapToList = map.toList()
-    mapToList = mapToList.sortedWith(compareBy({ it.first.length }, { -it.second }))
-
-    mapToList.forEach{
-        println(it)
-    }
-
-    var maxCount = mapToList[0].second
-    var length = mapToList[0].first.length
-
-
-    mapToList.forEach go@{
-        if (it.second >= 2) {
-
-            if (length != it.first.length) {
-                length = it.first.length
-                answer.add(it.first)
-                maxCount = it.second
-                return@go
-            }
-
-            if (maxCount == it.second)
-                answer.add(it.first)
-        }
-    }
-
-    answer.sort()
-    answer.forEach { println(it) }
 }
 
 fun combination(
     comb: MutableList<String>,
-    element: String,
+    element: List<Char>,
     part: String,
     start: Int,
     r: Int
@@ -71,7 +32,7 @@ fun combination(
         Unit
     }
     else -> {
-        for (i in start until element.length)
+        for (i in start until element.size)
             combination(comb, element, part + element[i], i + 1, r - 1)
     }
 }
