@@ -1,5 +1,6 @@
 package kotlinCode
 
+import util.permutation
 import java.beans.Expression
 import kotlin.math.abs
 import kotlin.math.absoluteValue
@@ -68,7 +69,3 @@ fun calculation(num1: Long, num2: Long, operation: Char) = when (operation) {
  *      - sub : fin 이 담는 리스트라면 sub 는 빼는 리스트 기본값은 el -> subtraction
  *      -> sub 의 원소를 빼서 fin 에 넣는 과정을 반복하여 sub 가 비었을 때 fin 을 반환한다.
  */
-fun <T> permutation(el: List<T>, fin: List<T> = listOf(), sub: List<T> = el): List<List<T>> {
-    return if (sub.isEmpty()) listOf(fin)
-    else sub.flatMap { permutation(el, fin + it, sub - it) }
-}
