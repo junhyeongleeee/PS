@@ -8,20 +8,17 @@ fun main() {
 }
 
 fun solution(citations: IntArray): Int {
-    var result = 0
     citations.sort()
 
-    var tmp = 0
-    citations.forEachIndexed { index, i ->
-        while (tmp <= i) {
-            println("tmp : $tmp, index : ${citations[index]}")
-            if (index < tmp && tmp <= citations.size - index) {
-                result = tmp
-            }
-            tmp++
+    val result = citations.sortedArrayDescending()
+
+    println(result.joinToString(","))
+
+    for (i in result.indices) {
+        if (result[i] < i + 1) {
+            return i
         }
     }
 
-    println(citations.joinToString(","))
-    return result
+    return 0
 }
