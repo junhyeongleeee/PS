@@ -5,8 +5,8 @@ import java.io.InputStreamReader
 import java.util.LinkedList
 
 
-val br = System.`in`.bufferedReader()
-val bw = System.out.bufferedWriter()
+private val br = System.`in`.bufferedReader()
+private val bw = System.out.bufferedWriter()
 
 fun main() = with(br) {
 

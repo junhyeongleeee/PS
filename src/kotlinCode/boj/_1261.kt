@@ -17,12 +17,12 @@ import java.util.LinkedList
  * 첫째 줄에 알고스팟 운영진이 (N, M)으로 이동하기 위해 벽을 최소 몇 개 부수어야 하는지 출력한다.
  */
 
-val dx = arrayOf(-1, 1, 0, 0)
-val dy = arrayOf(0, 0, -1, 1)
+private val dx = arrayOf(-1, 1, 0, 0)
+private val dy = arrayOf(0, 0, -1, 1)
 var n: Int = 0
 var m: Int = 0
-var arr: Array<IntArray> = arrayOf()
-var cntArr: Array<IntArray> = arrayOf()
+private var arr: Array<IntArray> = arrayOf()
+private var cntArr: Array<IntArray> = arrayOf()
 
 data class Point(val x: Int, val y: Int, val dis: Int)
 
