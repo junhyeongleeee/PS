@@ -42,7 +42,7 @@ fun main() {
     println(cntArr[m - 1][n - 1])
 }
 
-fun bfs(x: Int, y: Int) {
+private fun bfs(x: Int, y: Int) {
 
     val queue: LinkedList<Point> = LinkedList()
     queue.add(Point(x, y, 0))
