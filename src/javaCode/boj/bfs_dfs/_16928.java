@@ -31,8 +31,8 @@ public class _16928 {
         br = new BufferedReader(new InputStreamReader(System.in));
 
         st = new StringTokenizer(br.readLine());
-        N = Integer.valueOf(st.nextToken());
-        M = Integer.valueOf(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
         board = new int[10][10];
         counting = new int[10][10];
