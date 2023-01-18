@@ -50,8 +50,10 @@ public class _1260 {
 
         for (int i = 1; i < N + 1; i++) {
             visited = new boolean[N + 1];
-            System.out.println(dfs(i, visited, 0));
+            bw.write(dfs(i, visited, 0) + "\n");
         }
+        bw.flush();
+        bw.close();
     }
 
     static int dfs(int s, boolean[] visited, int sum) {
