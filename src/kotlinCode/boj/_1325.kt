@@ -1,6 +1,5 @@
 package kotlinCode.boj
 
-import java.util.LinkedList
 import java.util.StringTokenizer
 import kotlin.math.max
 
