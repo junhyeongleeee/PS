@@ -1,7 +1,6 @@
 package kotlinCode.boj
 
-import java.util.LinkedList
-
+import java.util.*
 
 /**
  *
@@ -19,13 +18,46 @@ import java.util.LinkedList
 
 private val br = System.`in`.bufferedReader()
 private val dx = intArrayOf(1, -1)
-private val queue = LinkedList<Int>()
+private val queue = ArrayDeque<Int>()
+private val dq = ArrayDeque<Pair<Int, Int>>()
 private const val MAX_SIZE = 100001
 private var arr = IntArray(MAX_SIZE) { Integer.MAX_VALUE }
+private val visited = BooleanArray(MAX_SIZE)
 fun main() = with(br) {
     val (n, k) = readLine().split(" ").map { it.toInt() }
     bfs13549(n)
+    // standard13549(n, k)
     println(arr[k])
+}
+
+fun standard13549(s: Int, k: Int) {
+    dq.add(Pair(s, 0))
+    visited[s] = true
+    var count = 0
+    while (!queue.isEmpty()) {
+        val q = dq.poll()
+        val index = q.first
+        val cnt = q.second
+
+        if (cnt == k) {
+            count = cnt
+            break
+        }
+
+        if (index * 2 <= 100000 && !visited[index * 2]) {
+            dq.addLast(Pair(index * 2, cnt))
+            visited[index * 2] = true
+        }
+        if (index - 1 >= 0 && !visited[index - 1]) {
+            dq.addLast(Pair(index - 1, cnt + 1))
+            visited[index - 1] = true
+        }
+        if (index + 1 <= 100000 && !visited[index + 1]) {
+            dq.addLast(Pair(index + 1, cnt + 1))
+            visited[index + 1] = true
+        }
+    }
+    println(count)
 }
 
 fun bfs13549(s: Int) {
