@@ -1,7 +1,6 @@
 package kotlinCode.boj
 
 import java.util.LinkedList
-import java.util.StringTokenizer
 
 
 /**
@@ -19,54 +18,42 @@ import java.util.StringTokenizer
  */
 
 private val br = System.`in`.bufferedReader()
-private val bw = System.out.bufferedWriter()
-private lateinit var st: StringTokenizer
-private val dx = intArrayOf(1, -1, 2)
+private val dx = intArrayOf(1, -1)
 private val queue = LinkedList<Int>()
-private var visited = BooleanArray(100001)
-private var arr = IntArray(100001)
-
+private const val MAX_SIZE = 100001
+private var arr = IntArray(MAX_SIZE) { Integer.MAX_VALUE }
 fun main() = with(br) {
     val (n, k) = readLine().split(" ").map { it.toInt() }
-    // 0
-    val result = bfs13549(n, k)
-    if (result != -1) {
-        println(result)
-    }
-    
+    bfs13549(n)
+    println(arr[k])
 }
 
-fun bfs13549(start: Int, end: Int): Int {
-    queue.add(start)
-    visited[start] = true
-
+fun bfs13549(s: Int) {
+    queue.add(s)
+    arr[s] = 0
     while (!queue.isEmpty()) {
         val q = queue.poll()
-
-        if (q == end) return arr[q]
-
-        when (q) {
-            0 -> check(q + 1, arr[q] + 1)
-            100000 -> check(q - 1, arr[q] + 1)
-            in 50001 until 100000 -> {
-                check(q - 1, arr[q] + 1)
-                check(q + 1, arr[q] + 1)
+        // 순간이동
+        if (q != 0) {
+            var i = q
+            while (true) {
+                val ni = i * 2
+                if (ni > MAX_SIZE - 1) break
+                if (arr[ni] > arr[i]) {
+                    arr[ni] = arr[i]
+                    queue.add(ni)
+                }
+                i = ni
             }
-            else -> {
-                check(q - 1, arr[q] + 1)
-                check(q + 1, arr[q] + 1)
-                queue.add(q*2)
-                visited[q*2] = true
-                arr[q*2] = arr[q]
+        }
+        // 걷기
+        for (i in 0 until 2) {
+            val nx = q + dx[i]
+            if (nx < 0 || nx >= MAX_SIZE) continue
+            if (arr[nx] > arr[q] + 1) {
+                arr[nx] = arr[q] + 1
+                queue.add(nx)
             }
         }
     }
-    return -1
-}
-
-fun check(np: Int, s: Int) {
-    if (visited[np] || arr[np] > s) return
-    queue.add(np)
-    visited[np] = true
-    arr[np] = s
 }
