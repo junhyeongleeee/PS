@@ -1,4 +1,4 @@
-package util
+
 
 /**
  *
@@ -26,7 +26,7 @@ fun main() {
     var answer = 0
 
     for (i in 1..columnSize)
-        combination(result, list.toMutableList(), BooleanArray(columnSize), 0, i)
+        candidateCombination(result, list.toMutableList(), BooleanArray(columnSize), 0, i)
 
     println(result)
 
@@ -67,7 +67,7 @@ fun <T> candidateCombination(
     else {
         for (i in start until comb.size) {
             visited[i] = true
-            combination(result, comb, visited, i + 1, r - 1)
+            candidateCombination(result, comb, visited, i + 1, r - 1)
             visited[i] = false
         }
     }
