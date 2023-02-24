@@ -1,8 +1,6 @@
 package kotlinCode.boj
 
-import java.util.Collections
-import java.util.PriorityQueue
-import java.util.StringTokenizer
+import java.util.*
 
 /**
  *  이중 우선 순위 큐
@@ -24,6 +22,7 @@ import java.util.StringTokenizer
 
 private val br = System.`in`.bufferedReader()
 private lateinit var st: StringTokenizer
+private val sb = StringBuilder()
 
 fun main() = with(br){
     val t = readLine().toInt()
@@ -31,9 +30,8 @@ fun main() = with(br){
     // 테스트
     repeat(t) {
         val k = readLine().toInt()
-        val minQueue = PriorityQueue<Int>()
-        val maxQueue = PriorityQueue<Int>(Collections.reverseOrder())
-        val map = mutableMapOf<Int, Int>()
+        val treeMap = TreeMap<Int, Int>()
+
         // 연산
         repeat(k) {
             st = StringTokenizer(readLine())
@@ -41,51 +39,30 @@ fun main() = with(br){
             val num = st.nextToken().toInt()
             when(op) {
                 "I" -> {
-                    minQueue.add(num)
-                    maxQueue.add(num)
-                    map[num] = map.getOrDefault(num, 0) + 1
+                    treeMap[num] = treeMap.getOrDefault(num, 0) + 1
                 }
                 "D" -> {
-                    if (map.isEmpty()) return@repeat
-                    // 최솟값 삭제
-                    if(num < 0) {
-                        remove7662(minQueue, map)
+                    if (treeMap.isEmpty()) return@repeat
+
+                    val v = if (num == 1) {
+                        treeMap.lastKey()
+                    }else {
+                        treeMap.firstKey()
                     }
-                    else {
-                        remove7662(maxQueue, map)
+                    if (treeMap[v] == 1) {
+                        treeMap.remove(v)
+                    }else {
+                        treeMap[v] = treeMap[v]!! - 1
                     }
                 }
             }
         }
-
-        if (map.isEmpty()) {
-            println("EMPTY")
+        if (treeMap.isEmpty()) {
+            sb.append("EMPTY").append("\n")
         }
         else {
-            val min = remove7662(minQueue, map)
-            if (map.isNotEmpty()) {
-                val max = remove7662(maxQueue, map)
-                println("$max $min")
-            }
-            else {
-                println("$min $min")
-            }
+            sb.append("${treeMap.lastKey()} ${treeMap.firstKey()}").append("\n")
         }
     }
-}
-
-fun remove7662(queue: PriorityQueue<Int>, map: MutableMap<Int, Int>): Int {
-    var num = 0
-    while (true) {
-        num = queue.poll()
-        if (!map.containsKey(num)) continue
-        if (map[num]!! == 1) {
-            map.remove(num)
-        }
-        else {
-            map[num] = map[num]!! - 1
-        }
-        break
-    }
-    return num
+    println(sb)
 }
