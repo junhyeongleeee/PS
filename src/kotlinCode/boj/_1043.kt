@@ -9,62 +9,34 @@ import java.util.StringTokenizer
  *
  */
 private lateinit var st: StringTokenizer
-private lateinit var arr: Array<MutableList<Int>>
-private lateinit var unionFind: IntArray
-private lateinit var knowPeople: BooleanArray
+private lateinit var arr: IntArray
+private lateinit var parent: IntArray
 fun main() = with(System.`in`.bufferedReader()) {
     st = StringTokenizer(readLine())
     val n = st.nextToken().toInt()
     val m = st.nextToken().toInt()
 
-    arr = Array(m + 1) { mutableListOf() }
-    unionFind = IntArray(n + 1) { it }
-    knowPeople = BooleanArray(n + 1)
+    arr = IntArray(m)
+    parent = IntArray(n + 1) { it }
 
     st = StringTokenizer(readLine())
     repeat(st.nextToken().toInt()) {
-        knowPeople[st.nextToken().toInt()] = true
+        union(0, st.nextToken().toInt())
     }
 
-    for (i in 1 .. m) {
+    repeat(m) { i ->
         st = StringTokenizer(readLine())
-        repeat(st.nextToken().toInt()) { j ->
-            val num = st.nextToken().toInt()
-            arr[i].add(num)
+        val total = st.nextToken().toInt()
+        val p = st.nextToken().toInt()
+        repeat(total - 1) {
+            union(p, st.nextToken().toInt())
         }
-
-        for (j in 0 until arr[i].size - 1) {
-            val p = arr[i][j]
-            val np = arr[i][j + 1]
-            if (find(p) != find(np)) {
-                union(p, np)
-            }
-        }
-    }
-
-    val visited = BooleanArray(n + 1)
-    for (i in 1 .. n) {
-        if (knowPeople[i] && !visited[i]) {
-            val parent = find(i)
-            for (j in 1..n) {
-                if (find(j) == parent) {
-                    knowPeople[j] = true
-                    visited[j] = true
-                }
-            }
-        }
+        arr[i] = parent[p]
     }
 
     var result = 0
-    for (i in 1 .. m) {
-        var flag = false
-        for (p in arr[i]) {
-            if (knowPeople[p]) {
-                flag = true
-                break
-            }
-        }
-        if (!flag) {
+    repeat(m) { i ->
+        if (find(arr[i]) != 0) {
             result++
         }
     }
@@ -72,10 +44,17 @@ fun main() = with(System.`in`.bufferedReader()) {
     println(result)
 }
 
-fun find(a: Int): Int = if (a == unionFind[a]) {
+fun find(a: Int): Int = if (a == parent[a]) {
     a
-} else find(unionFind[a])
+} else find(parent[a])
 
 fun union(a: Int, b: Int) {
-    unionFind[find(b)] = a
+    val ap = parent[a]
+    val bp = parent[b]
+    if (ap > bp) {
+        parent[ap] = bp
+    }
+    else {
+        parent[bp] = ap
+    }
 }
