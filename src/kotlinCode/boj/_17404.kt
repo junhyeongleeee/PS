@@ -6,7 +6,13 @@ import kotlin.math.min
 private lateinit var st: StringTokenizer
 private lateinit var dp: Array<IntArray>
 private lateinit var arr: Array<IntArray>
+
+private val arr1 : IntArray by lazy {
+    intArrayOf(-1, 0, 1)
+}
+
 private const val INF = 1_000 * 1_000
+
 fun main() = with(System.`in`.bufferedReader()) {
     val n = readLine().toInt()
 

@@ -2,7 +2,6 @@ package kotlinCode.boj
 
 import java.util.ArrayDeque
 import java.util.StringTokenizer
-import kotlin.math.min
 
 /**
  *  다리 만들기2
