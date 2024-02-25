@@ -1,11 +1,8 @@
 package javaCode.boj.bfs_dfs;
 
-import javafx.util.Pair;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class _1260 {
