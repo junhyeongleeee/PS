@@ -29,48 +29,12 @@ private val sb = StringBuilder()
 
 private val brTag = "<br>"
 private val hrTag = "<hr>"
-private val hrLine = "--------------------------------------------------------------------------------"
+private val hrLine = "--------------------------------------------------------------------------------\n"
 fun main() = with(System.`in`.bufferedReader()) {
 
     var lineSize = 0
 
-    repeat(13) {
-        st = StringTokenizer(readLine())
-
-//        println("line: ${line}")
-
-        while (st.hasMoreTokens()) {
-            val word = st.nextToken()
-
-            if (word.isEmpty()) continue
-
-//            println("lineSize: $lineSize")
-            sb.append(
-                when(word) {
-                    brTag -> {
-                        lineSize = 0
-                        removeLastBlank()
-                        "\n"
-                    }
-                    hrTag -> {
-                        lineSize = 0
-                        removeLastBlank()
-                        if (sb.last() == '\n') hrLine + "\n" else "\n" + hrLine + "\n"
-                    }
-                    else -> {
-                        lineSize += word.length + 1
-                        if (lineSize > 81) {
-                            lineSize = word.length + 1
-                            removeLastBlank()
-                            "\n$word"
-                        } else "$word "
-                    }
-                }
-            )
-        }
-    }
-
-    /*while (true) {
+    while (true) {
         val line = readLine() ?: break
         st = StringTokenizer(line)
 
@@ -90,25 +54,28 @@ fun main() = with(System.`in`.bufferedReader()) {
                     }
                     hrTag -> {
                         lineSize = 0
-                        if (sb.last().toString() == "\n") hrLine + "\n" else "\n" + hrLine + "\n"
+                        if (sb.last() == '\n') hrLine else "\n" + hrLine
                     }
                     else -> {
-                        lineSize += word.length + 1
-                        if (lineSize > 80) {
-                            lineSize = word.length
-                            "\n$word"
-                        } else "$word "
+                        when {
+                            lineSize == 0 -> {
+                                lineSize = word.length
+                                word
+                            }
+                            lineSize + word.length >= 80 -> {
+                                lineSize = word.length
+                                "\n$word"
+                            }
+                            else -> {
+                                lineSize += word.length + 1
+                                " $word"
+                            }
+                        }
                     }
                 }
             )
         }
-    }*/
+    }
 
     println(sb)
-}
-
-fun removeLastBlank() {
-    if (sb.last() == ' ') {
-        sb.deleteAt(sb.lastIndex)
-    }
 }
