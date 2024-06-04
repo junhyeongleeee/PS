@@ -1,12 +1,12 @@
 package kotlinCode.boj
 
 import java.util.StringTokenizer
+import kotlin.math.min
 
 
 private lateinit var st: StringTokenizer
 private val sb = StringBuilder()
 private lateinit var arr: Array<MutableList<Node11657>>
-private lateinit var visited: BooleanArray
 private lateinit var dist: LongArray
 
 data class Node11657(val v: Int, val c: Int)
@@ -16,7 +16,6 @@ fun main() = with(System.`in`.bufferedReader()) {
 
     arr = Array(n + 1) { mutableListOf() }
     dist = LongArray(n + 1) { Long.MAX_VALUE }
-    visited = BooleanArray(n + 1)
 
     repeat(m) {
         st = StringTokenizer(readLine())
@@ -25,50 +24,43 @@ fun main() = with(System.`in`.bufferedReader()) {
         val b = st.nextToken().toInt()
         val c = st.nextToken().toInt()
 
-        if (a != b) {
-            arr[a].add(Node11657(b, c))
-        }
+        arr[a].add(Node11657(b, c))
+    }
 
+    // 1이 아무것도 연결 안되어있을 때
+    if (arr[1].size == 0) {
+        for (i in 2 .. n) {
+            sb.append(-1).appendLine()
+        }
+        println(sb)
+        return@with
     }
 
     dist[1] = 0
 
-    if (solve11657(n)) {
-        println(-1)
-        return@with
-    } else {
-        for (i in 2..n) {
-            sb.append(if (dist[i] == Long.MAX_VALUE) -1 else dist[i]).append("\n")
-        }
-    }
-    println(sb)
-}
-
-fun solve11657(n: Int): Boolean {
-
-    var result = false
-
-    for (j in 1 until n) {              // V - 1 만큼
-
-        for (i in 1..n) {             // 모든 정점 확인
-
-            for (node in arr[i]) {
-                if (dist[node.v] > dist[i] + node.c) {
-                    dist[node.v] = dist[i] + node.c
+    for (i in 0 until n - 1) {
+        for (j in 1 .. n) {
+            for (v in arr[j]) {
+                if (dist[j] != Long.MAX_VALUE && dist[v.v] > dist[j] + v.c) {
+                    dist[v.v] = dist[j] + v.c
                 }
             }
         }
     }
+//    println("dist: ${dist.joinToString(" ")}")
 
-    for (i in 1..n) {
-        for (node in arr[i]) {
-            if (dist[node.v] > dist[i] + node.c) {
-                result = true
-                break
+    for (j in 1 .. n) {
+        for (v in arr[j]) {
+            if (dist[j] != Long.MAX_VALUE && dist[v.v] > dist[j] + v.c) {
+                println(-1)
+                return@with
             }
         }
     }
 
-    return result
-}
+    for (i in 2 .. n) {
+        sb.append(if (dist[i] == Long.MAX_VALUE) -1 else dist[i]).appendLine()
+    }
 
+    println(sb)
+}
