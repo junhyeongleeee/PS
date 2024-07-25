@@ -6,11 +6,13 @@ import kotlin.system.exitProcess
 private lateinit var st: StringTokenizer
 private lateinit var arr: Array<MutableList<Int>>
 private lateinit var result: IntArray
+private lateinit var visited: Array<BooleanArray>
 
 fun main() = with(System.`in`.bufferedReader()) {
     val n = readLine().toInt()                      // <= 1_000
     arr = Array(n) { mutableListOf() }
     result = IntArray(n)
+    visited = Array(n) { BooleanArray(9) }
 
     repeat(n) { i ->
         st = StringTokenizer(readLine())
@@ -31,9 +33,9 @@ fun solve16432(idx: Int, prev: Int, n: Int) {
     }
 
     for (i in 0 until arr[idx].size) {
-        if (prev != -1 && arr[idx - 1][prev] == arr[idx][i]) continue
-        println("idx: $idx i: $i prev: $prev")
+        if (visited[idx][i] || prev == arr[idx][i]) continue
+        visited[idx][i] = true
         result[idx] = arr[idx][i]
-        solve16432(idx + 1, i, n)
+        solve16432(idx + 1, arr[idx][i], n)
     }
 }
