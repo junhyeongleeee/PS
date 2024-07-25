@@ -1,41 +1,54 @@
-package kotlinCode.boj
+import java.util.*
 
-import java.util.StringTokenizer
-import kotlin.system.exitProcess
+fun solveRiceCakeProblem(N: Int, cakes: List<List<Int>>): List<Int> {
+    val dp = Array(N) { IntArray(10) { -1 } }
+    val prev = Array(N) { IntArray(10) { -1 } }
 
-private lateinit var st: StringTokenizer
-private lateinit var arr: Array<MutableList<Int>>
-private lateinit var result: IntArray
-private lateinit var visited: Array<BooleanArray>
+    // 첫 번째 날 초기화
+    for (cake in cakes[0]) {
+        dp[0][cake] = cake
+    }
 
-fun main() = with(System.`in`.bufferedReader()) {
-    val n = readLine().toInt()                      // <= 1_000
-    arr = Array(n) { mutableListOf() }
-    result = IntArray(n)
-    visited = Array(n) { BooleanArray(9) }
-
-    repeat(n) { i ->
-        st = StringTokenizer(readLine())
-        val m = st.nextToken().toInt()                  // <= 9
-        repeat(m) { j ->
-            arr[i].add(st.nextToken().toInt())        // <= 9
+    // DP 테이블 채우기
+    for (day in 1 until N) {
+        for (todayCake in cakes[day]) {
+            for (yesterdayCake in 1..9) {
+                if (dp[day-1][yesterdayCake] != -1 && yesterdayCake != todayCake) {
+                    dp[day][todayCake] = todayCake
+                    prev[day][todayCake] = yesterdayCake
+                    break
+                }
+            }
         }
     }
-    solve16432(0, -1, n)
 
-    println(-1)
+    // 해결책 찾기
+    val solution = MutableList(N) { 0 }
+    var lastCake = dp[N-1].indexOfFirst { it != -1 }
+    if (lastCake == -1) return listOf(-1)
+
+    for (day in N-1 downTo 0) {
+        solution[day] = lastCake
+        lastCake = prev[day][lastCake]
+    }
+
+    return solution
 }
 
-fun solve16432(idx: Int, prev: Int, n: Int) {
-    if (idx == n) {
-        println(result.joinToString("\n"))
-        exitProcess(0)
+fun main() {
+    val reader = System.`in`.bufferedReader()
+    val writer = System.out.bufferedWriter()
+
+    val N = reader.readLine().toInt()
+    val cakes = List(N) {
+        reader.readLine().split(" ").map { it.toInt() }.drop(1)
     }
 
-    for (i in 0 until arr[idx].size) {
-        if (visited[idx][i] || prev == arr[idx][i]) continue
-        visited[idx][i] = true
-        result[idx] = arr[idx][i]
-        solve16432(idx + 1, arr[idx][i], n)
-    }
+    val result = solveRiceCakeProblem(N, cakes)
+
+    result.forEach { writer.write("$it\n") }
+
+    writer.flush()
+    writer.close()
+    reader.close()
 }
