@@ -1,4 +1,4 @@
-package kotlinCode
+package kotlinCode.boj
 
 import java.util.StringTokenizer
 
